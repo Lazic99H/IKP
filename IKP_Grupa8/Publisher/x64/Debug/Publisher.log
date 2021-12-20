@@ -1,2 +1,4 @@
 ﻿  Publisher.cpp
+C:\Users\acopr\Documents\GitHub\IKP\IKP_Grupa8\Publisher\Publisher.cpp(57,10): warning C4101: 'message': unreferenced local variable
+C:\Users\acopr\Documents\GitHub\IKP\IKP_Grupa8\Publisher\Publisher.cpp(56,10): warning C4101: 'topic': unreferenced local variable
   Publisher.vcxproj -> C:\Users\acopr\Documents\GitHub\IKP\IKP_Grupa8\x64\Debug\Publishers.exe

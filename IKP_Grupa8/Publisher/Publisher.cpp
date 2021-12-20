@@ -7,20 +7,21 @@
 #include <stdio.h>
 #include <conio.h>
 
-#define DEFAULT_BUFLEN 512
+#define DEFAULT_BUFLEN 128
 #define DEFAULT_PORT 27016
+
+struct PublisherNotice {
+    char topic[DEFAULT_BUFLEN];
+    char message[DEFAULT_BUFLEN];
+};
 
 bool InitializeWindowsSockets();
 
 int __cdecl main(int argc, char** argv)
 {
-    // socket used to communicate with server
     SOCKET connectSocket = INVALID_SOCKET;
-    // variable used to store function return value
+  
     int iResult;
-    // message to send
-    const char* messageToSend = "this is a test";//char* ne moze, mora const char*
-
 
     if (InitializeWindowsSockets() == false)
     {
@@ -52,20 +53,30 @@ int __cdecl main(int argc, char** argv)
         WSACleanup();
     }
 
-    // Send an prepared message with null terminator included
-    iResult = send(connectSocket, messageToSend, (int)strlen(messageToSend) + 1, 0);
+    char topic[DEFAULT_BUFLEN];
+    char message[DEFAULT_BUFLEN];
 
-    if (iResult == SOCKET_ERROR)
-    {
-        printf("send failed with error: %d\n", WSAGetLastError());
-        closesocket(connectSocket);
-        WSACleanup();
-        return 1;
-    }
+    PublisherNotice notice;
 
-    printf("Bytes Sent: %ld\n", iResult);
-    getchar();
-    // cleanup
+    do {
+        printf("Enter topic: \n");
+        gets_s(notice.topic, DEFAULT_BUFLEN);
+        printf("Enter message you want to send to your subscribers \n");
+        gets_s(notice.message, DEFAULT_BUFLEN);
+        iResult = send(connectSocket, (char*)&notice, sizeof(notice), 0);
+
+        if (iResult == SOCKET_ERROR)
+        {
+            printf("send failed with error: %d\n", WSAGetLastError());
+            closesocket(connectSocket);
+            WSACleanup();
+            return 1;
+        }
+
+        printf("Bytes Sent: %ld\n", iResult);
+        getchar();
+    
+    } while (true);
     closesocket(connectSocket);
     WSACleanup();
 
